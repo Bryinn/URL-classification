@@ -218,3 +218,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# custom
+phishing+websites/
+# Pipeline artifacts (regenerate with scripts/01-03)
+outputs/*.joblib
+outputs/clean_dataset.csv

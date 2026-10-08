@@ -1,0 +1,92 @@
+RANDOM FOREST - PHISHING WEBSITE CLASSIFICATION RESULTS
+============================================================
+Positive class: phishing (1)   Negative class: legitimate (0)   Threshold: 0.5
+Features (10): having_IP_Address, URL_Length, Shortining_Service, Prefix_Suffix, having_Sub_Domain, Favicon, Request_URL, URL_of_Anchor, Links_in_tags, SFH
+Hyper-parameters: {'class_weight': 'balanced', 'criterion': 'entropy', 'max_depth': 12, 'max_features': 'sqrt', 'min_samples_leaf': 4, 'min_samples_split': 18, 'n_estimators': 696}
+Train rows: 8841   Test rows: 2214 (no duplicate rows shared with train)
+
+HELD-OUT TEST SET
+------------------------------------------------------------
+  Accuracy                    0.8952
+  Balanced accuracy           0.8920
+  Precision (PPV)             0.8963
+  Recall (sensitivity, TPR)   0.8634
+  Specificity (TNR)           0.9205
+  Negative predictive value   0.8944
+  F1 (phishing)               0.8795
+  F1 macro                    0.8934
+  F1 weighted                 0.8950
+  F2                          0.8698
+  False positive rate         0.0795
+  False negative rate         0.1366
+  Matthews corr. coef.        0.7873
+  Cohen's kappa               0.7869
+  ROC-AUC                     0.9608
+  PR-AUC (avg. precision)     0.9553
+  Log loss                    0.2502
+  Brier score                 0.0771
+
+  Confusion matrix (rows = actual, cols = predicted)
+                  legitimate    phishing
+  legitimate            1135          98
+  phishing               134         847
+
+  Per-class report
+              precision    recall  f1-score   support
+
+  legitimate     0.8944    0.9205    0.9073      1233
+    phishing     0.8963    0.8634    0.8795       981
+
+    accuracy                         0.8952      2214
+   macro avg     0.8954    0.8920    0.8934      2214
+weighted avg     0.8952    0.8952    0.8950      2214
+
+TRAINING SET - 5-FOLD GROUP CV (out-of-fold, pooled)
+------------------------------------------------------------
+  Accuracy                    0.8940
+  Balanced accuracy           0.8920
+  Precision (PPV)             0.8852
+  Recall (sensitivity, TPR)   0.8741
+  Specificity (TNR)           0.9098
+  Negative predictive value   0.9009
+  F1 (phishing)               0.8796
+  F1 macro                    0.8925
+  F1 weighted                 0.8939
+  F2                          0.8763
+  False positive rate         0.0902
+  False negative rate         0.1259
+  Matthews corr. coef.        0.7850
+  Cohen's kappa               0.7850
+  ROC-AUC                     0.9629
+  PR-AUC (avg. precision)     0.9602
+  Log loss                    0.2404
+  Brier score                 0.0753
+
+  Per-fold mean +/- std
+  Accuracy                    0.8940 +/- 0.0159
+  Balanced accuracy           0.8920 +/- 0.0151
+  Precision (PPV)             0.8857 +/- 0.0255
+  Recall (sensitivity, TPR)   0.8741 +/- 0.0118
+  Specificity (TNR)           0.9098 +/- 0.0225
+  Negative predictive value   0.9008 +/- 0.0099
+  F1 (phishing)               0.8798 +/- 0.0167
+  F1 macro                    0.8925 +/- 0.0158
+  F1 weighted                 0.8939 +/- 0.0157
+  F2                          0.8764 +/- 0.0129
+  False positive rate         0.0902 +/- 0.0225
+  False negative rate         0.1259 +/- 0.0118
+  Matthews corr. coef.        0.7852 +/- 0.0317
+  Cohen's kappa               0.7850 +/- 0.0317
+  ROC-AUC                     0.9634 +/- 0.0067
+  PR-AUC (avg. precision)     0.9600 +/- 0.0075
+  Log loss                    0.2404 +/- 0.0171
+  Brier score                 0.0753 +/- 0.0073
+
+LEAKAGE REFERENCE RUNS (same hyper-parameters, NOT the final model)
+------------------------------------------------------------
+  all_30_features_random_split (leaky features + duplicate leakage)
+    accuracy=0.9566  precision=0.9557  recall=0.9459  f1=0.9508  roc_auc=0.9931
+  all_30_features_group_split (leaky features)
+    accuracy=0.9472  precision=0.9491  recall=0.9307  f1=0.9398  roc_auc=0.9888
+  selected_features_random_split (duplicate leakage)
+    accuracy=0.8964  precision=0.8924  recall=0.8714  f1=0.8818  roc_auc=0.9674

@@ -1,0 +1,282 @@
+{
+  "mode": "default",
+  "n_rows": 11055,
+  "exact_duplicate_rows": 5206,
+  "conflicting_label_vectors": 64,
+  "removed": {
+    "Statistical_report": {
+      "category": "label-source leakage",
+      "reason": "Host is looked up in PhishTank / StopBadware top-phishing lists; PhishTank is also the source of the phishing labels, so the feature partially encodes the target."
+    },
+    "web_traffic": {
+      "category": "third-party reputation",
+      "reason": "Alexa traffic rank. Legitimate samples were drawn from popular-site lists, so rank encodes how a sample was collected (same pattern as PhiUSIIL's URLSimilarityIndex)."
+    },
+    "Page_Rank": {
+      "category": "third-party reputation",
+      "reason": "Google PageRank lookup (service discontinued); popularity proxy tied to sampling source."
+    },
+    "Google_Index": {
+      "category": "third-party reputation",
+      "reason": "Requires querying Google's index; new phishing pages are unindexed by construction."
+    },
+    "Links_pointing_to_page": {
+      "category": "third-party reputation",
+      "reason": "Backlink count from an external link index; popularity proxy, unavailable at first sight."
+    },
+    "age_of_domain": {
+      "category": "WHOIS / crawl-time dependent",
+      "reason": "WHOIS lookup whose value depends on when the crawl happened relative to the report date; threshold (6 months) was tuned on the labelled dataset."
+    },
+    "Domain_registeration_length": {
+      "category": "WHOIS / crawl-time dependent",
+      "reason": "WHOIS expiry lookup; threshold (1 year) tuned on the labelled dataset."
+    },
+    "DNSRecord": {
+      "category": "WHOIS / crawl-time dependent",
+      "reason": "Empty WHOIS/DNS record often reflects a domain already taken down after being reported, i.e. post-label information."
+    },
+    "Abnormal_URL": {
+      "category": "WHOIS / crawl-time dependent",
+      "reason": "Compares the host against the WHOIS-registered identity (third-party lookup)."
+    },
+    "SSLfinal_State": {
+      "category": "third-party reputation",
+      "reason": "Certificate issuer checked against a hand-picked 'trusted CA' list plus certificate age threshold tuned on the dataset; a curated reputation score, not a URL/page property."
+    }
+  },
+  "kept": [
+    "having_IP_Address",
+    "URL_Length",
+    "Shortining_Service",
+    "having_At_Symbol",
+    "double_slash_redirecting",
+    "Prefix_Suffix",
+    "having_Sub_Domain",
+    "Favicon",
+    "port",
+    "HTTPS_token",
+    "Request_URL",
+    "URL_of_Anchor",
+    "Links_in_tags",
+    "SFH",
+    "Submitting_to_email",
+    "Redirect",
+    "on_mouseover",
+    "RightClick",
+    "popUpWidnow",
+    "Iframe"
+  ],
+  "diagnostics": [
+    {
+      "feature": "SSLfinal_State",
+      "single_feature_auc": 0.8884249739015696,
+      "mutual_info": 0.3462150644318975,
+      "documented_leaky": true,
+      "suspicious": true
+    },
+    {
+      "feature": "URL_of_Anchor",
+      "single_feature_auc": 0.8720864876881265,
+      "mutual_info": 0.33084133633370294,
+      "documented_leaky": false,
+      "suspicious": true
+    },
+    {
+      "feature": "web_traffic",
+      "single_feature_auc": 0.6898487468210517,
+      "mutual_info": 0.07942919119404915,
+      "documented_leaky": true,
+      "suspicious": false
+    },
+    {
+      "feature": "having_Sub_Domain",
+      "single_feature_auc": 0.6895679992688925,
+      "mutual_info": 0.07606278511487011,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "Links_in_tags",
+      "single_feature_auc": 0.6308281106076054,
+      "mutual_info": 0.03260361790218558,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "Request_URL",
+      "single_feature_auc": 0.6191319318183852,
+      "mutual_info": 0.0322701237868262,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "Prefix_Suffix",
+      "single_feature_auc": 0.6159519721234741,
+      "mutual_info": 0.0855564758906629,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "Domain_registeration_length",
+      "single_feature_auc": 0.5995062139167355,
+      "mutual_info": 0.02550874023116939,
+      "documented_leaky": true,
+      "suspicious": false
+    },
+    {
+      "feature": "SFH",
+      "single_feature_auc": 0.5880259884061357,
+      "mutual_info": 0.02598642144855054,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "age_of_domain",
+      "single_feature_auc": 0.5560689818272954,
+      "mutual_info": 0.0073916556375037135,
+      "documented_leaky": true,
+      "suspicious": false
+    },
+    {
+      "feature": "having_IP_Address",
+      "single_feature_auc": 0.543599134873757,
+      "mutual_info": 0.004421668243450527,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "Google_Index",
+      "single_feature_auc": 0.5407857403256413,
+      "mutual_info": 0.00826718427785686,
+      "documented_leaky": true,
+      "suspicious": false
+    },
+    {
+      "feature": "Page_Rank",
+      "single_feature_auc": 0.5407821093261774,
+      "mutual_info": 0.005548433264511682,
+      "documented_leaky": true,
+      "suspicious": false
+    },
+    {
+      "feature": "Links_pointing_to_page",
+      "single_feature_auc": 0.5318016694373902,
+      "mutual_info": 0.0030263705637276483,
+      "documented_leaky": true,
+      "suspicious": false
+    },
+    {
+      "feature": "DNSRecord",
+      "single_feature_auc": 0.5291608053934833,
+      "mutual_info": 0.0028577728808527048,
+      "documented_leaky": true,
+      "suspicious": false
+    },
+    {
+      "feature": "URL_Length",
+      "single_feature_auc": 0.5243661617908367,
+      "mutual_info": 0.002630548077230007,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "Statistical_report",
+      "single_feature_auc": 0.5214137778888116,
+      "mutual_info": 0.0031664133077413115,
+      "documented_leaky": true,
+      "suspicious": false
+    },
+    {
+      "feature": "Abnormal_URL",
+      "single_feature_auc": 0.5195020152212824,
+      "mutual_info": 0.0018523108165172386,
+      "documented_leaky": true,
+      "suspicious": false
+    },
+    {
+      "feature": "Shortining_Service",
+      "single_feature_auc": 0.5193393000215605,
+      "mutual_info": 0.002347518699855361,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "having_At_Symbol",
+      "single_feature_auc": 0.5152225258850469,
+      "mutual_info": 0.0013938540017284229,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "popUpWidnow",
+      "single_feature_auc": 0.5144218656333892,
+      "mutual_info": 3.688233968235366e-09,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "Favicon",
+      "single_feature_auc": 0.5113904287384687,
+      "mutual_info": 3.906837936495933e-08,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "HTTPS_token",
+      "single_feature_auc": 0.5108932139305964,
+      "mutual_info": 0.0007995823021455795,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "on_mouseover",
+      "single_feature_auc": 0.5099672261677609,
+      "mutual_info": 0.0008703540547384536,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "double_slash_redirecting",
+      "single_feature_auc": 0.5083916045190988,
+      "mutual_info": 0.000751316420244702,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "Iframe",
+      "single_feature_auc": 0.5055250050518973,
+      "mutual_info": 5.762337458498079e-06,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "port",
+      "single_feature_auc": 0.5051144202540665,
+      "mutual_info": 0.0006600769837423748,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "Redirect",
+      "single_feature_auc": 0.5037496452729062,
+      "mutual_info": 0.00020162447897933977,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "RightClick",
+      "single_feature_auc": 0.5003681733976997,
+      "mutual_info": 7.975080216686414e-05,
+      "documented_leaky": false,
+      "suspicious": false
+    },
+    {
+      "feature": "Submitting_to_email",
+      "single_feature_auc": 0.5002954705088897,
+      "mutual_info": 0.00016616650974482505,
+      "documented_leaky": false,
+      "suspicious": false
+    }
+  ]
+}
