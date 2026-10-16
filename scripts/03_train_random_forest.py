@@ -43,7 +43,7 @@ PARAM_DIST = {
     "criterion": ["gini", "entropy"],
 }
 
-
+# Compute evaluation metrics for the random forest model.
 def compute_metrics(y, proba, threshold: float = 0.5) -> dict:
     """Binary metrics with phishing (1) as the positive class."""
     y = np.asarray(y)
@@ -77,7 +77,7 @@ def compute_metrics(y, proba, threshold: float = 0.5) -> dict:
         "confusion_matrix": [[int(tn), int(fp)], [int(fn), int(tp)]],
     }
 
-
+# Evaluate a model on a given dataset.
 def evaluate(model, X, y) -> dict:
     return compute_metrics(y, model.predict_proba(X)[:, 1])
 

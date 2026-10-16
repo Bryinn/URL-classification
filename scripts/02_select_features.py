@@ -32,14 +32,14 @@ from selection_output import write_selection_outputs
 warnings.filterwarnings("ignore", message=".*Falling back to prediction using DMatrix.*")
 N_FOLDS = 5
 
-
+# Create an XGBoost random forest model on the specified device.
 def make_model(device: str) -> xgb.XGBRFClassifier:
     return xgb.XGBRFClassifier(
         n_estimators=300, max_depth=10, subsample=0.8, colsample_bynode=0.6,
         tree_method="hist", device=device, random_state=SEED, n_jobs=-1,
     )
 
-
+# Perform a single cross-validation step and compute SHAP values.
 def cv_step(X: pd.DataFrame, y: pd.Series, groups: pd.Series, device: str):
     cv = StratifiedGroupKFold(n_splits=N_FOLDS, shuffle=True, random_state=SEED)
     aucs, shap_abs = [], np.zeros(X.shape[1])
@@ -64,6 +64,7 @@ def main() -> None:
 
     mi = pd.Series(mutual_info_classif(X, y, discrete_features=True, random_state=SEED), index=feats)
 
+    # Initialize the list of remaining features, history of CV results, elimination order, and initial SHAP values.
     remaining, history, elimination_order, initial_shap = list(feats), [], [], None
     while remaining:
         aucs, shap = cv_step(X[remaining], y, groups, args.device)
@@ -77,6 +78,7 @@ def main() -> None:
         elimination_order.append(weakest)
         remaining.remove(weakest)
 
+    # After the elimination loop, construct the feature ranking and select the best subset based on the 1-SE rule.
     curve = pd.DataFrame(history)
     best = curve.loc[curve.auc_mean.idxmax()]
     threshold = best.auc_mean - best.auc_se

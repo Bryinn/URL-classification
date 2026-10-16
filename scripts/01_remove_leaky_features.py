@@ -89,9 +89,10 @@ PAGE_FEATURES = [
     "Submitting_to_email", "Redirect", "on_mouseover", "RightClick", "popUpWidnow", "Iframe",
 ]
 
+# Threshold for considering a feature as suspiciously predictive.
 SUSPICIOUS_AUC = 0.85
 
-
+# Compute single-feature AUC and mutual information for all features.
 def single_feature_auc(x: pd.Series, y: pd.Series, groups: pd.Series) -> float:
     """Out-of-fold ROC-AUC using only P(phishing | feature value) learned on the train folds."""
     oof = np.zeros(len(y))
@@ -102,8 +103,8 @@ def single_feature_auc(x: pd.Series, y: pd.Series, groups: pd.Series) -> float:
     auc = roc_auc_score(y, oof)
     return max(auc, 1 - auc)
 
-
 def main() -> None:
+    #init
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--url-only", action="store_true",
                     help="also drop page/host-content features (keep only raw-URL lexical features)")
@@ -111,17 +112,20 @@ def main() -> None:
                     help="hold out 1/N of the groups as the test set (default 5 -> 20%%)")
     args = ap.parse_args()
 
+    # Load the raw dataset and prepare feature matrix, target vector, and group labels.
     raw = load_raw()
     X_all = raw.drop(columns=TARGET)
     y = (raw[TARGET] == -1).astype(int).rename(LABEL)
     groups = row_groups(X_all)
 
+    # Compute basic dataset statistics.
     n_dup = int(raw.duplicated().sum())
     conflict = int((raw.assign(g=groups).groupby("g")[TARGET].nunique() > 1).sum())
     print(f"Rows: {len(raw)}  phishing: {y.sum()}  legitimate: {(1 - y).sum()}")
     print(f"Exact duplicate rows: {n_dup} ({n_dup / len(raw):.1%})  unique vectors: {groups.nunique()}"
           f"  vectors with conflicting labels: {conflict}")
 
+    # Compute empirical diagnostics for each feature.
     print("\nEmpirical diagnostics (group-aware out-of-fold single-feature AUC, mutual information):")
     mi = mutual_info_classif(X_all, y, discrete_features=True, random_state=SEED)
     diag = pd.DataFrame({
@@ -131,7 +135,7 @@ def main() -> None:
     diag["documented_leaky"] = diag.index.isin(LEAKY_FEATURES)
     diag["suspicious"] = diag.single_feature_auc >= SUSPICIOUS_AUC
     print(diag.round(4).to_string())
-
+    # Determine which features to drop based on documented leaks and suspicious samples
     to_drop = dict(LEAKY_FEATURES)
     if args.url_only:
         for f in PAGE_FEATURES:
@@ -150,12 +154,13 @@ def main() -> None:
     kept = [c for c in X_all.columns if c not in to_drop]
     print(f"\nKept features ({len(kept)}): {kept}")
 
-    # Fixed group-aware hold-out split shared by all later steps.
+    # Fixed group-aware hold-out split shared by all later steps (train/test split).
     split = np.full(len(raw), "train", dtype=object)
     cv = StratifiedGroupKFold(n_splits=args.test_size_folds, shuffle=True, random_state=SEED)
     _, test_idx = next(cv.split(X_all, y, groups))
     split[test_idx] = "test"
 
+    # Construct the clean dataset with only the kept features and the train/test split.
     clean = X_all[kept].assign(**{LABEL: y, GROUP: groups, SPLIT: split})
     tr_g, te_g = set(groups[split == "train"]), set(groups[split == "test"])
     print(f"\nSplit: train={int((split == 'train').sum())} test={int((split == 'test').sum())} "
